@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include <maple-pkg.h>
+#include <maple-log.h>
 
 #define THIS_PROCESS "maple-pkg"
 
@@ -9,16 +11,16 @@ void preparePackage(char *name, char *pkg, int debug)
 {
     if (!pkg)
     {
-        printf("(maple-pkg) INFO :: Making new project with no template.\n");
-        if (debug == 1) printf("(maple-pkg) DBG  :: strcat & mkdir...\n");
+        info(THIS_PROCESS, "Making new project with no template.");
+        if (debug == 1) dbg(THIS_PROCESS, "strcat & mkdir...");
         char cmds[256];
         memset(cmds, 0, 256);
         strcat(cmds, "mkdir ");
         strcat(cmds, name);
         system(cmds);
-        if (debug == 1) printf("(maple-pkg) DBG  :: flush\n");
+        if (debug == 1) dbg(THIS_PROCESS, "flush...");
         memset(cmds, 0, 256);
-        if (debug == 1) printf("(maple-pkg) DBG  :: set up directory and file chars\n");
+        if (debug == 1) dbg(THIS_PROCESS, "set up directory and file chars...");
         char path[256];
         memset(path, 0, 256);
         strcat(path, "./");
@@ -31,7 +33,7 @@ void preparePackage(char *name, char *pkg, int debug)
         memset(config, 0, 256);
         strcpy(config, name);
         strcat(config, ",0");
-        if (debug == 1) printf("(maple-pkg) DBG  :: write cfg file\n");
+        if (debug == 1) dbg(THIS_PROCESS, "writing cfg file...");
         FILE *cfg = NULL;
         cfg = fopen(cfgpath, "w");
         if(cfg) {
@@ -41,16 +43,16 @@ void preparePackage(char *name, char *pkg, int debug)
     }
     else
     {
-        printf("(maple-pkg) INFO :: Making new project with a template.\n");
-        if (debug == 1) printf("(maple-pkg) DBG  :: strcat & mkdir...\n");
+        info(THIS_PROCESS, "Making new project with no template.");
+        if (debug == 1) dbg(THIS_PROCESS, "strcat & mkdir...");
         char cmds[256];
         memset(cmds, 0, 256);
         strcat(cmds, "mkdir ");
         strcat(cmds, name);
         system(cmds);
-        if (debug == 1) printf("(maple-pkg) DBG  :: flush\n");
+        if (debug == 1) dbg(THIS_PROCESS, "flush...");
         memset(cmds, 0, 256);
-        if (debug == 1) printf("(maple-pkg) DBG  :: set up directory and file chars\n");
+        if (debug == 1) dbg(THIS_PROCESS, "set up directory and file chars...");
         char path[256];
         memset(path, 0, 256);
         strcat(path, "./");
@@ -63,7 +65,7 @@ void preparePackage(char *name, char *pkg, int debug)
         memset(config, 0, 256);
         strcpy(config, name);
         strcat(config, ",0");
-        if (debug == 1) printf("(maple-pkg) DBG  :: write cfg file\n");
+        if (debug == 1) dbg(THIS_PROCESS, "writing cfg file...");
         FILE *cfg = NULL;
         cfg = fopen(cfgpath, "w");
         if(cfg) {
@@ -71,7 +73,7 @@ void preparePackage(char *name, char *pkg, int debug)
             fclose(cfg);
         }
 
-        printf("(maple-pkg) INFO :: Downloading package...\n");
+        info(THIS_PROCESS, "Downloading package...");
         char pkgu[256];
         memset(pkgu, 0, 256);
         strcat(pkgu, "wget -O maplepkg.tar.gz http://192.168.1.42:5555/s?p=");
@@ -81,7 +83,7 @@ void preparePackage(char *name, char *pkg, int debug)
         strcat(path, "tar -xvzf maplepkg.tar.gz -C ./");
         strcat(path, name);
         system(path);
-        printf("(maple-pkg) INFO :: Finishing up...\n");
+        info(THIS_PROCESS, "Finishing up...");
         remove("maplepkg.tar.gz");
     }
 }
