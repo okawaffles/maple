@@ -11,26 +11,30 @@
 
 int main(int argc, char *argv[])
 {
-    info("maple", "Welcome to MapleTools");
+    info("maple", "Welcome to Maple");
     bool success = true;
 
     if (argv[1])
     {
         if(!strcmp(argv[1], "dl"))
         {
-            if(argv[2] && argv[3])
+            if(argv[2])
             {
-                maple_dl(argv[2], argv[3]);
+                maple_dl(argv[2]);
             }
             else
             {
-                err(THIS_PROCESS, "No user/file provided.");
+                err(THIS_PROCESS, "No URL provided.");
                 success = false;
             }
         }
         else if (!strcmp(argv[1], "new"))
         {
-            maplepkg(1, argv[2], argv[3], 1);
+            maplepkg(1, argv[2], argv[3], 0);
+        }
+        else if (!strcmp(argv[1], "build"))
+        {
+            maplepkg(2, argv[2], argv[2], 0);
         }
         else
         {
