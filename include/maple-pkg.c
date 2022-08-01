@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <maple-pkg.h>
 
+#define THIS_PROCESS "maple-pkg"
 
 void preparePackage(char *name, char *pkg, int debug)
 {
@@ -35,7 +35,7 @@ void preparePackage(char *name, char *pkg, int debug)
         FILE *cfg = NULL;
         cfg = fopen(cfgpath, "w");
         if(cfg) {
-            fprintf(cfg, config);
+            fprintf(cfg, "%s", config);
             fclose(cfg);
         }
     }
@@ -67,7 +67,7 @@ void preparePackage(char *name, char *pkg, int debug)
         FILE *cfg = NULL;
         cfg = fopen(cfgpath, "w");
         if(cfg) {
-            fprintf(cfg, config);
+            fprintf(cfg, "%s", config);
             fclose(cfg);
         }
 
@@ -86,6 +86,11 @@ void preparePackage(char *name, char *pkg, int debug)
     }
 }
 
+void installPackage(char *name, int debug)
+{
+    // tbf
+}
+
 
 
 int maplepkg(int action, char *name, char *pkg, int debug)
@@ -94,6 +99,10 @@ int maplepkg(int action, char *name, char *pkg, int debug)
     {
         case 1:
             preparePackage(name, pkg, debug);
+            break;
+        case 2:
+            preparePackage(name, pkg, debug);
+            installPackage(name, debug);
             break;
     }
     return 0;

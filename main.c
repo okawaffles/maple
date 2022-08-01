@@ -1,31 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
 
 #include <maple-pkg.h>
+#include <maple-log.h>
+#include <maple-dl.h>
 
-void info(char *proc, char *msg)
-{
-    char tmp[256];
-    strcat(tmp, "(");
-    strcat(tmp, proc);
-    strcat(tmp, ") INFO :: ");
-    strcat(tmp, msg);
-    printf("%s\n", tmp);
-    memset(tmp, 0, 256);
-}
-void err(char *proc, char *msg)
-{
-    char tmp[256];
-    strcat(tmp, "(");
-    strcat(tmp, proc);
-    strcat(tmp, ") ERR  :: ");
-    strcat(tmp, msg);
-    printf("%s\n", tmp);
-    memset(tmp, 0, 256);
-}
+#define THIS_PROCESS "maple"
 
 int main(int argc, char *argv[])
 {
@@ -38,28 +20,11 @@ int main(int argc, char *argv[])
         {
             if(argv[2] && argv[3])
             {
-                info("maple-dl", "Downloading file from OkayuCDN...");
-
-                char cmd[256];
-                memset(cmd, 0, 256);
-                strcat(cmd, "wget https://okayu.okawaffles.com/content/");
-                strcat(cmd, argv[2]);
-                strcat(cmd, "/");
-                strcat(cmd, argv[3]);
-
-                if(system(cmd) == 0)
-                {
-                    info("maple-dl", "Finished!");
-                }
-                else
-                {
-                    err("maple-dl", "Failed to download file.");
-                    success = false;
-                }
+                maple_dl(argv[2], argv[3]);
             }
             else
             {
-                err("maple-dl", "No user/file provided.");
+                err(THIS_PROCESS, "No user/file provided.");
                 success = false;
             }
         }
@@ -69,13 +34,13 @@ int main(int argc, char *argv[])
         }
         else
         {
-            err("maple", "Unrecognized action.");
+            err(THIS_PROCESS, "Unrecognized action.");
             success = false;
         }
     }
     else
     {
-        err("maple", "No action provided, stop.");
+        err(THIS_PROCESS, "No action provided, stop.");
         success = false;
     }
 
